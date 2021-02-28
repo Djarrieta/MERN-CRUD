@@ -53,7 +53,9 @@ app.post("/delete", async (req, res) => {
 
 //Cargar todos los items
 app.post("/load", (req, res) => {
-	Item.find().then((result) => {
-		res.send(result);
-	});
+	Item.find()
+		.sort("item")
+		.then((result) => {
+			res.send(result);
+		});
 });
