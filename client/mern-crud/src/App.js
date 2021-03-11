@@ -20,7 +20,10 @@ function App() {
 				setItems(res.data);
 				setLoading(false);
 			})
-			.catch((e) => console.error(e));
+			.catch((e) => {
+				setLoading(false);
+				console.error(e);
+			});
 	};
 	useEffect(() => {
 		loadData();
@@ -115,16 +118,16 @@ function App() {
 	};
 
 	return (
-		<div className="App container mx-auto min-h-screen bg-primary-dark text-secundary">
+		<div className="container min-h-screen mx-auto App bg-primary-dark text-secundary">
 			<Header />
 			{/* Form */}
-			<div className="flex justify-center items-center h-full">
-				<div className="w-full max-w-md bg-primary text-secundary m-6 flex flex-col rounded-lg p-2 border-l border-b border-primary-light">
+			<div className="flex items-center justify-center h-full">
+				<div className="flex flex-col w-full max-w-md p-2 m-6 border-b border-l rounded-lg bg-primary text-secundary border-primary-light">
 					{/* Id */}
 					<div className="flex flex-col ">
 						<label className="text-xs">Id</label>
 						<input
-							className="focus:outline-none mb-2 rounded px-2 text-primary"
+							className="px-2 mb-2 rounded focus:outline-none text-primary"
 							type="text"
 							value={id}
 							disabled
@@ -134,7 +137,7 @@ function App() {
 					<div className="flex flex-col ">
 						<label className="text-xs">Item</label>
 						<input
-							className="focus:outline-none mb-2 rounded px-2 text-primary"
+							className="px-2 mb-2 rounded focus:outline-none text-primary"
 							type="text"
 							value={item}
 							onChange={(e) => {
@@ -146,7 +149,7 @@ function App() {
 					<div className="flex flex-col ">
 						<label className="text-xs">Cantidad</label>
 						<input
-							className="focus:outline-none mb-2 rounded px-2 text-primary"
+							className="px-2 mb-2 rounded focus:outline-none text-primary"
 							type="number"
 							value={cant}
 							onChange={(e) => {
@@ -156,13 +159,13 @@ function App() {
 					</div>
 					<div className="flex w-full">
 						<button
-							className="w-2/3 focus:outline-none border border-realced rounded-lg mx-4 my-2 py-2 text-realced hover:bg-primary hover:text-secundary-light"
+							className="w-2/3 py-2 mx-4 my-2 border rounded-lg focus:outline-none border-realced text-realced hover:bg-primary hover:text-secundary-light"
 							onClick={save}
 						>
 							{id ? "Editar" : "Agregar"} Item
 						</button>
 						<button
-							className="w-1/3 focus:outline-none border border-realced rounded-lg mx-4 my-2 py-2 text-realced hover:bg-primary hover:text-secundary-light"
+							className="w-1/3 py-2 mx-4 my-2 border rounded-lg focus:outline-none border-realced text-realced hover:bg-primary hover:text-secundary-light"
 							onClick={clearData}
 						>
 							Limpiar
@@ -171,18 +174,18 @@ function App() {
 				</div>
 			</div>
 			{/* List */}
-			<div className="flex flex-col w-full max-w-5xl mx-auto rounded-lg overflow-hidden  items-center">
+			<div className="flex flex-col items-center w-full max-w-5xl mx-auto overflow-hidden rounded-lg">
 				{/* Loading */}
 				{loading && (
-					<div className="animate-ping rounded-full h-32 w-32 bg-realced p-1">
-						<div className="bg-primary-dark w-full h-full rounded-full "></div>
+					<div className="w-32 h-32 p-1 rounded-full animate-ping bg-realced">
+						<div className="w-full h-full rounded-full bg-primary-dark "></div>
 					</div>
 				)}
 				{!loading &&
 					items.map((item, index) => {
 						return (
 							<div
-								className="w-full border-b border-primary-light bg-primary justify-between items-center flex px-2 py-1"
+								className="flex items-center justify-between w-full px-2 py-1 border-b border-primary-light bg-primary"
 								key={index}
 							>
 								<div className="flex flex-col mx-2">
@@ -193,7 +196,7 @@ function App() {
 								<div className="flex">
 									{/* Edit */}
 									<svg
-										className="h-5 text-realced cursor-pointer mx-2"
+										className="h-5 mx-2 cursor-pointer text-realced"
 										onClick={() => selecToEdit(item)}
 										xmlns="http://www.w3.org/2000/svg"
 										fill="none"
@@ -208,7 +211,7 @@ function App() {
 										/>
 									</svg>
 									<svg
-										className="h-5 text-error cursor-pointer mx-2"
+										className="h-5 mx-2 cursor-pointer text-error"
 										onClick={() => selecToDelete(item._id)}
 										xmlns="http://www.w3.org/2000/svg"
 										fill="none"

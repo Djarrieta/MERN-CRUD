@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Item = require("./models/Items");
+const cors = require("cors");
 require("dotenv").config();
 
 const db = process.env.MONGO_DB;
@@ -11,6 +12,7 @@ const user = process.env.MONGO_USER;
 const app = express();
 //permite leer como json los datos que vienen de front
 app.use(express.json());
+app.use(cors());
 
 //mongo
 const uri = `mongodb+srv://${user}:${pass}@clustermern-crud.sh7wu.mongodb.net/${db}?retryWrites=true&w=majority`;
