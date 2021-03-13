@@ -13,7 +13,9 @@ const About = () => {
 				library to error and alert messages and mongoose to manage mongodb.
 			</p>
 			<p className="my-2">
-				You can also make your own user and only admins can upgrate you.{" "}
+				You can also make your own user and only admins can upgrate you. The
+				roles console is in the profile section on profile menu. Only admins can
+				see it.{" "}
 			</p>
 			<p className="my-2">Made by Darío Arrieta</p>
 			<a href="https://github.com/Djarrieta/MERN-CRUD" className="text-realced">

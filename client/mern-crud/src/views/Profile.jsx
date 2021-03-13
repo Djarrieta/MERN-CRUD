@@ -88,33 +88,35 @@ const Profile = (props) => {
 				</div>
 			</div>
 			{/* USER LIST */}
-			<div className="flex flex-col items-center w-full max-w-5xl mx-auto overflow-hidden rounded-lg">
-				{loading && (
-					<div className="w-32 h-32 p-1 rounded-full animate-ping bg-realced">
-						<div className="w-full h-full rounded-full bg-primary-dark "></div>
-					</div>
-				)}
-				{!loading &&
-					users.map((user, index) => {
-						return (
-							<div
-								className="flex items-center justify-between w-full px-2 py-1 border-b border-primary-light bg-primary hover:bg-primary-light"
-								key={index}
-							>
-								<div className="flex flex-col mx-2">
-									<div>{user.userName}</div>
-									<div className="text-xs">{user._id}</div>
-								</div>
-								<button
-									onClick={() => handleChangeRole(user._id, user.role)}
-									className="px-2 py-1 mx-2 rounded bg-primary-light hover:bg-primary"
+			{currentUser.role === "admin" && (
+				<div className="flex flex-col items-center w-full max-w-5xl mx-auto overflow-hidden rounded-lg">
+					{loading && (
+						<div className="w-32 h-32 p-1 rounded-full animate-ping bg-realced">
+							<div className="w-full h-full rounded-full bg-primary-dark "></div>
+						</div>
+					)}
+					{!loading &&
+						users.map((user, index) => {
+							return (
+								<div
+									className="flex items-center justify-between w-full px-2 py-1 border-b border-primary-light bg-primary hover:bg-primary-light"
+									key={index}
 								>
-									{user.role}
-								</button>
-							</div>
-						);
-					})}
-			</div>
+									<div className="flex flex-col mx-2">
+										<div>{user.userName}</div>
+										<div className="text-xs">{user._id}</div>
+									</div>
+									<button
+										onClick={() => handleChangeRole(user._id, user.role)}
+										className="px-2 py-1 mx-2 rounded bg-primary-light hover:bg-primary"
+									>
+										{user.role}
+									</button>
+								</div>
+							);
+						})}
+				</div>
+			)}
 		</div>
 	);
 };

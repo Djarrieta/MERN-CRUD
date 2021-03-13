@@ -94,14 +94,14 @@ app.post("/signin", async (req, res) => {
 	}
 });
 //Add Item
-app.post("/add", (req, res) => {
+app.post("/add", async (req, res) => {
 	const { uid, item, cant } = req.body;
 
-	const itemObject = new Item({ uid, item, cant });
-	if (!uid || !item || !cant) {
+	if (!uid || !item) {
 		return res.status(400).send({ error: "Datos Inválidos al crear item" });
 	}
-
+	const itemObject = await new Item({ uid, item, cant });
+	console.log(itemObject);
 	itemObject
 		.save()
 		.then((result) => {
