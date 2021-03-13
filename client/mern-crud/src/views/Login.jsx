@@ -4,15 +4,19 @@ import { useHistory } from "react-router-dom";
 
 const Login = (props) => {
 	const { setCurrentUser } = props;
-
 	const [userName, setUserName] = useState("");
-	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmation, setConfirmation] = useState("");
 	const [problems, setProblems] = useState("");
 	const [hasAccount, setHasAccount] = useState(true);
 
 	const history = useHistory();
+	const clearData = () => {
+		setUserName("");
+		setPassword("");
+		setConfirmation("");
+		setProblems("");
+	};
 
 	const handleSignIn = () => {
 		setProblems("");
@@ -28,19 +32,14 @@ const Login = (props) => {
 		axios
 			.post("http://localhost:3001/signin", { userName, password })
 			.then((user) => {
-				console.log("usuario", user);
 				setCurrentUser({
-					email: user.data.email,
 					userName: user.data.userName,
-					_id: user.data._id,
+					uid: user.data.uid,
+					role: user.data.role,
 				});
 
 				//cleaning data
-				setUserName("");
-				setEmail("");
-				setPassword("");
-				setConfirmation("");
-				setProblems("");
+				clearData();
 				//redirect
 				history.push("/");
 			})
@@ -60,44 +59,40 @@ const Login = (props) => {
 		if (!password) {
 			setProblems("Contraseña inválida");
 		}
-		if (!email) {
-			setProblems("Correo inválido");
-		}
 		if (!userName) {
 			setProblems("Nombre de usuario inválido");
 		}
 
 		if (problems) {
-			console.log("no continua porque hay problemas", problems);
 			return;
 		}
 		axios
-			.post("http://localhost:3001/signup", { userName, email, password })
+			.post("http://localhost:3001/signup", { userName, password })
 			.then((user) => {
+				console.log(user);
 				setCurrentUser({
-					email: user.data.email,
 					userName: user.data.userName,
-					_id: user.data._id,
+					uid: user.data.uid,
+					role: user.data.role,
 				});
 
 				//cleaning data
-				setUserName("");
-				setEmail("");
-				setPassword("");
-				setConfirmation("");
-				setProblems("");
+				clearData();
 				//redirect
 				history.push("/");
 			})
 			.catch((e) => {
-				setProblems("Datos inválidos! nombre de usuario o email ya existen.");
+				setProblems("Datos inválidos! nombre de usuario ya existen.");
 				console.error(e);
 			});
 	};
 
 	return (
 		<div className="flex items-center justify-center h-full">
-			<div className="flex flex-col w-full max-w-md p-2 m-6 border-b border-l rounded-lg bg-primary text-secundary border-primary-light">
+			<div className="flex flex-col w-full max-w-md px-6 py-4 m-6 border-b border-l rounded-lg bg-primary text-secundary border-primary-light">
+				<h1 className="my-3 text-4xl ">
+					{hasAccount ? "Ingreso" : "Registro"}
+				</h1>
 				{/* userName */}
 				<div className="flex flex-col">
 					<label className="text-xs">Usuario</label>
@@ -112,22 +107,6 @@ const Login = (props) => {
 						}}
 					/>
 				</div>
-				{/* Email */}
-				{!hasAccount && (
-					<div className="flex flex-col">
-						<label className="text-xs">Correo</label>
-						<input
-							className="px-2 mb-2 rounded focus:outline-none text-primary"
-							type="text"
-							autoFocus
-							required
-							value={email}
-							onChange={(e) => {
-								setEmail(e.target.value);
-							}}
-						/>
-					</div>
-				)}
 
 				{/* password */}
 				<div className="flex flex-col">
@@ -164,45 +143,23 @@ const Login = (props) => {
 				<p className="text-error">{problems}</p>
 				{/* Buttons */}
 				<div className="flex flex-col justify-between w-full px-6">
-					{hasAccount ? (
-						<>
-							<button
-								className="w-full py-2 mx-4 my-2 border rounded-lg focus:outline-none border-realced text-realced hover:bg-primary hover:text-secundary-light"
-								onClick={handleSignIn}
-							>
-								Ingreso
-							</button>
-							<p>
-								¿No tienes una cuenta?
-								<span
-									className="mx-2 text-blue-500 cursor-pointer"
-									onClick={() => setHasAccount(!hasAccount)}
-								>
-									Registro
-								</span>
-							</p>
-						</>
-					) : (
-						<>
-							<button
-								className="w-full py-2 mx-4 my-2 border rounded-lg focus:outline-none border-realced text-realced hover:bg-primary hover:text-secundary-light"
-								onClick={handleSignUp}
-							>
-								Registro
-							</button>
-							<p>
-								¿Ya tienes una cuenta?
-								<span
-									className="mx-2 text-blue-500 cursor-pointer"
-									onClick={() => {
-										setHasAccount(!hasAccount);
-									}}
-								>
-									Ingresa
-								</span>
-							</p>
-						</>
-					)}
+					<button
+						className="w-full py-2 mx-4 my-2 border rounded-lg focus:outline-none border-realced text-realced hover:bg-primary hover:text-secundary-light"
+						onClick={hasAccount ? handleSignIn : handleSignUp}
+					>
+						{hasAccount ? "Ingreso" : "Registro"}
+					</button>
+					<div className="flex justify-center my-2">
+						<p>
+							{hasAccount ? "¿No tienes una cuenta?" : "¿Ya tienes una cuenta?"}
+						</p>
+						<span
+							className="mx-2 text-blue-500 cursor-pointer "
+							onClick={() => setHasAccount(!hasAccount)}
+						>
+							{hasAccount ? "Registrate" : "Ingresa"}
+						</span>
+					</div>
 				</div>
 			</div>
 		</div>

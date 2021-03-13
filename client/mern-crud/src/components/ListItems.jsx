@@ -2,9 +2,25 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 const ListItems = (props) => {
-	const { loading, items, loadData, setId, setItem, setCant } = props;
+	const {
+		loading,
+		items,
+		loadData,
+		setId,
+		setItem,
+		setCant,
+		currentUser,
+	} = props;
 	/*Delete existing item */
 	const selecToDelete = (itemId) => {
+		if (currentUser.role !== "admin") {
+			Swal.fire({
+				icon: "error",
+				title:
+					"Solo los administradores pueden eliminar, como usuario básico, solo puedes crear",
+			});
+			return;
+		}
 		Swal.fire({
 			title: "Seguro quieres eliminar este ítem?",
 			showDenyButton: true,
@@ -13,10 +29,14 @@ const ListItems = (props) => {
 			denyButtonText: `No eliminar`,
 		}).then((result) => {
 			if (result.isConfirmed) {
-				axios.post("http://localhost:3001/delete", { itemId }).then(() => {
-					loadData();
-				});
-				Swal.fire("Eliminado!", "", "success");
+				axios
+					.post("http://localhost:3001/delete", {
+						itemId,
+						uid: currentUser.uid,
+					})
+					.then(() => {
+						loadData();
+					});
 			} else if (result.isDenied) {
 				Swal.fire("Los cambios no fueron guardados", "", "info");
 			}
@@ -39,7 +59,7 @@ const ListItems = (props) => {
 				items.map((item, index) => {
 					return (
 						<div
-							className="flex items-center justify-between w-full px-2 py-1 border-b border-primary-light bg-primary"
+							className="flex items-center justify-between w-full px-2 py-1 border-b border-primary-light bg-primary hover:bg-primary-light"
 							key={index}
 						>
 							<div className="flex flex-col mx-2">

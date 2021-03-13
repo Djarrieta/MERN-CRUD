@@ -3,15 +3,38 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import ListItems from "../components/ListItems";
 
-const Home = () => {
-	const [id, setId] = useState("");
+const Home = (props) => {
+	const { currentUser } = props;
+	const [_id, setId] = useState("");
 	const [item, setItem] = useState("");
 	const [cant, setCant] = useState(0);
 	const [items, setItems] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const save = () => {
-		if (id) {
+		if (!currentUser) {
+			Swal.fire({
+				icon: "error",
+				title: "Debes estar registrado para guardar cambios.",
+			});
+			return;
+		}
+		if (_id) {
 			/* update */
+			if (currentUser.role !== "admin") {
+				Swal.fire({
+					icon: "error",
+					title:
+						"Solo los administradores pueden editar, como usuario básico, solo puedes crear",
+				});
+				return;
+			}
+			if (!item) {
+				Swal.fire({
+					icon: "error",
+					title: "No puedes crear un ítem sin texto!",
+				});
+				return;
+			}
 			Swal.fire({
 				title: "Seguro quieres actualizar estos datos?",
 				showDenyButton: true,
@@ -21,7 +44,12 @@ const Home = () => {
 			}).then((result) => {
 				if (result.isConfirmed) {
 					axios
-						.post("http://localhost:3001/update", { id, item, cant })
+						.post("http://localhost:3001/update", {
+							uid: currentUser.uid,
+							_id,
+							item,
+							cant,
+						})
 						.then(() => {
 							loadData();
 							clearData();
@@ -35,8 +63,7 @@ const Home = () => {
 			if (!item) {
 				Swal.fire({
 					icon: "error",
-					title: "Oops...",
-					text: "No puedes crear un ítem sin texto!",
+					title: "No puedes crear un ítem sin texto!",
 				});
 				return;
 			}
@@ -50,7 +77,11 @@ const Home = () => {
 			}).then((result) => {
 				if (result.isConfirmed) {
 					axios
-						.post("http://localhost:3001/add", { item, cant })
+						.post("http://localhost:3001/add", {
+							uid: currentUser.uid,
+							item,
+							cant,
+						})
 						.then(() => {
 							loadData();
 							clearData();
@@ -86,18 +117,20 @@ const Home = () => {
 	}, []);
 
 	return (
-		<div className="flex flex-col items-center justify-center h-full">
+		<div className="flex flex-col items-center h-full">
 			<div className="flex flex-col w-full max-w-md p-2 m-6 border-b border-l rounded-lg bg-primary text-secundary border-primary-light">
 				{/* Id */}
-				<div className="flex flex-col ">
-					<label className="text-xs">Id</label>
-					<input
-						className="px-2 mb-2 rounded focus:outline-none text-primary"
-						type="text"
-						value={id}
-						disabled
-					/>
-				</div>
+				{_id && (
+					<div className="flex flex-col ">
+						<label className="text-xs">Id</label>
+						<input
+							className="px-2 mb-2 rounded focus:outline-none text-primary"
+							type="text"
+							value={_id}
+							disabled
+						/>
+					</div>
+				)}
 				{/* Item */}
 				<div className="flex flex-col ">
 					<label className="text-xs">Item</label>
@@ -127,7 +160,7 @@ const Home = () => {
 						className="w-2/3 py-2 mx-4 my-2 border rounded-lg focus:outline-none border-realced text-realced hover:bg-primary hover:text-secundary-light"
 						onClick={save}
 					>
-						{id ? "Editar" : "Agregar"} Item
+						{_id ? "Editar" : "Agregar"} Item
 					</button>
 					<button
 						className="w-1/3 py-2 mx-4 my-2 border rounded-lg focus:outline-none border-realced text-realced hover:bg-primary hover:text-secundary-light"
@@ -144,6 +177,7 @@ const Home = () => {
 				setId={setId}
 				setItem={setItem}
 				setCant={setCant}
+				currentUser={currentUser}
 			/>
 		</div>
 

@@ -24,7 +24,22 @@ const Header = (props) => {
 							clipRule="evenodd"
 						/>
 					</svg>
-					<a href="/">Logo</a>
+					<Link to="/">
+						<svg
+							className="w-10 h-10"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+							/>
+						</svg>
+					</Link>
 					{/* Principal Menu */}
 					{principalMenu && (
 						<div
@@ -33,18 +48,18 @@ const Header = (props) => {
 							className="absolute top-0 left-0 w-64 pb-2 "
 						>
 							<div className="flex flex-col px-6 py-1 mt-16 border-b border-l rounded-lg border-primary-light bg-primary">
-								<a
+								<Link
 									className="w-full px-2 py-1 my-1 text-center border-b rounded hover:bg-primary-light border-primary-light text-realced"
-									href="/login"
+									to="/"
 								>
-									Login
-								</a>
-								<a
+									Home
+								</Link>
+								<Link
 									className="w-full px-2 py-1 my-1 text-center rounded hover:bg-primary-light text-realced"
-									href="/about"
+									to="/about"
 								>
 									About
-								</a>
+								</Link>
 							</div>
 						</div>
 					)}
@@ -82,19 +97,20 @@ const Header = (props) => {
 								)}
 								{!currentUser && (
 									<Link
-										className="w-full px-2 py-1 my-1 overflow-hidden text-center border-b rounded hover:bg-primary-light border-primary-light text-realced"
+										className="w-full px-2 py-1 my-1 overflow-hidden text-center rounded hover:bg-primary-light text-realced"
 										to="/login"
 									>
 										Login
 									</Link>
 								)}
-
-								<button
-									className="w-full px-2 py-1 my-1 text-center rounded hover:bg-primary-light text-realced"
-									onClick={() => signOut()}
-								>
-									Salir
-								</button>
+								{currentUser && (
+									<button
+										className="w-full px-2 py-1 my-1 text-center rounded hover:bg-primary-light text-realced"
+										onClick={() => signOut()}
+									>
+										Salir
+									</button>
+								)}
 							</div>
 						</div>
 					)}

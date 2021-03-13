@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 import Home from "./views/Home";
+import About from "./views/About";
 import Login from "./views/Login";
 import Profile from "./views/Profile";
 import Header from "./components/Header";
@@ -30,7 +31,7 @@ function App() {
 				<Switch>
 					{/* Home */}
 					<Route exact path="/">
-						<Home />
+						<Home currentUser={currentUser} />
 					</Route>
 					{/* Login */}
 					<Route exact path="/login">
@@ -48,6 +49,7 @@ function App() {
 							<Redirect to="/login" />
 						)}
 					</Route>
+					<Route exact path="/about" component={About}></Route>
 				</Switch>
 			</div>
 		</BrowserRouter>
